@@ -1,17 +1,23 @@
 import styled from 'styled-components';
 import { COLORS } from '../style/constants';
+import { loginBackground } from '../style/svg';
 
 export const LoginContainer = styled.div`
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: radial-gradient(${COLORS.primary.dark}, ${COLORS.primary.light});
+    background: url(${loginBackground});
     .login-box {
         background-color: ${COLORS.white};
         .title {
-            font-size: 24px;
+            font-size: 40px;
             font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 0 ${COLORS.primary.dark};
+            -webkit-text-stroke-width: 1px;
+            -webkit-text-stroke-color: ${COLORS.primary.dark};
         }
         display: flex;
         justify-content: center;

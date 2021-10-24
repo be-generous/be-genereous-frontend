@@ -8,6 +8,8 @@ import TextInput from '../common/TextInput';
 import { ButtonDefault, ButtonPrimary } from '../common/Buttons.css';
 import { ArrowForward } from '@mui/icons-material';
 
+import InlineSVG from 'react-inlinesvg';
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

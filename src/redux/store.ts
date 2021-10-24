@@ -8,7 +8,7 @@ const reducers = {
 };
 
 const persistConfig = {
-    key: 'root',
+    key: 'bgroot',
     storage,
     whitelist: ['auth']
 };
