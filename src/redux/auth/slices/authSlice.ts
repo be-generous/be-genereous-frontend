@@ -1,18 +1,14 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import BeGenerousAPI from '../../../api/BeGenerousAPI';
+import { PERSIST } from 'redux-persist';
 
 export const logUserIn = createAsyncThunk('users/logUserIn', async (params: { email: string; password: string }, thunkAPI) => {
     const { email, password } = params;
-    const result = await new Promise((resolve, reject) => {
-        if (email === 'asd' && password === 'asd') return resolve(true);
-        return resolve(false);
-    });
-    if (result === false) {
-        return thunkAPI.rejectWithValue({ message: 'Login failed' });
+    const result = await BeGenerousAPI.login(email, password);
+    if (!result.success) {
+        return thunkAPI.rejectWithValue({ message: result.message });
     }
-    const userResponse: { userId: string } = {
-        userId: 'asd'
-    };
-    return { user: userResponse, error: null };
+    return { token: result.token };
 });
 
 export const logUserOut = createAsyncThunk('users/logUserOut', async (_, thunkAPI) => {
@@ -22,21 +18,21 @@ export const logUserOut = createAsyncThunk('users/logUserOut', async (_, thunkAP
     if (result === false) {
         return thunkAPI.rejectWithValue({ message: 'Logout failed' });
     }
-    return { user: '', error: null };
+    return { error: null };
 });
 
 export interface AuthState {
     token: string;
     loggedIn: boolean;
-    error: {
-        message: string;
-    } | null;
+    isFetching: boolean;
+    errMessage: string;
 }
 
 const initialState: AuthState = {
     token: '',
     loggedIn: false,
-    error: null
+    isFetching: false,
+    errMessage: ''
 };
 
 const slice = createSlice({
@@ -46,29 +42,37 @@ const slice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(logUserIn.fulfilled, (state, action: any) => {
-                console.log(action);
-                state.token = action.payload.user.userId;
+                state.token = action.payload.token;
                 state.loggedIn = true;
-                state.error = null;
+                state.isFetching = false;
+                state.errMessage = action.payload.message;
             })
             .addCase(logUserIn.rejected, (state, action: any) => {
-                console.log(action);
                 state.token = '';
                 state.loggedIn = false;
-                state.error = {
-                    message: action.payload.message
-                };
+                state.isFetching = false;
+                state.errMessage = action.payload.message;
+            })
+            .addCase(logUserIn.pending, (state) => {
+                state.isFetching = true;
             })
             .addCase(logUserOut.fulfilled, (state, action: any) => {
                 state.token = '';
                 state.loggedIn = false;
-                state.error = null;
+                state.isFetching = false;
+                state.errMessage = action.payload.message;
+            })
+            .addCase(logUserOut.pending, (state) => {
+                state.isFetching = true;
             })
             .addCase(logUserOut.rejected, (state, action: any) => {
                 state.token = '';
-                state.error = {
-                    message: action.payload.message
-                };
+                state.loggedIn = false;
+                state.isFetching = false;
+                state.errMessage = action.payload.message;
+            })
+            .addCase(PERSIST, (state) => {
+                state.errMessage = '';
             });
     }
 });

@@ -1,23 +1,38 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { persistReducer, persistStore } from 'redux-persist';
+import { configureStore } from '@reduxjs/toolkit';
+import { createTransform, FLUSH, PAUSE, PERSIST, persistCombineReducers, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
+import { PersistPartial } from 'redux-persist/es/persistReducer';
 import storage from 'redux-persist/lib/storage';
 import authReducer from './auth/slices/authSlice';
+
+const transformCircular = createTransform(
+    (inboundState) => JSON.stringify(inboundState),
+    (outboundState) => {
+        let newState = JSON.parse(outboundState);
+        newState.errMessage = '';
+        return newState;
+    }
+);
+const rootPersistConfig = {
+    key: 'bgroot',
+    storage,
+    transforms: [transformCircular],
+
+    whitelist: ['auth']
+};
 
 const reducers = {
     auth: authReducer
 };
-
-const persistConfig = {
-    key: 'bgroot',
-    storage,
-    whitelist: ['auth']
-};
-
-const rootReducer = combineReducers(reducers);
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistCombineReducers(rootPersistConfig, reducers);
 
 export const store = configureStore({
-    reducer: persistedReducer
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PERSIST, PAUSE, PURGE, REGISTER]
+            }
+        })
 });
 
 export const persistor = persistStore(store);
