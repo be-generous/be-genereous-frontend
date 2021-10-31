@@ -11,6 +11,7 @@ export const ButtonPrimary = styled(Button)`
 `;
 export const ButtonDefault = styled(Button)`
     width: 120px;
+    min-width: fit-content;
     color: ${COLORS.primary.light};
     border-color: ${COLORS.primary.light};
     &:hover {

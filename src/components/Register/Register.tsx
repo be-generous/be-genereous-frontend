@@ -1,33 +1,46 @@
 import React, { ChangeEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { logUserIn } from '../../redux/auth/slices/authSlice';
-import { LoginContainer } from './Login.css';
+import { RegisterContainer } from './Register.css';
 import TextInput from '../common/TextInput';
 import { ButtonDefault, ButtonPrimary } from '../common/Buttons.css';
-import { ArrowForward } from '@mui/icons-material';
+import { ArrowBack } from '@mui/icons-material';
 import { RootState } from '../../redux/store';
 import { useHistory } from 'react-router-dom';
+import { testEmail, testPassword } from '../../utils/utils';
 
-const Login = () => {
+const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const dispatch = useDispatch();
     const { errMessage } = useSelector((state: RootState) => state.auth);
     const history = useHistory();
 
-    const handleLoginClick = async (evt: any) => {
+    const handleRegisterClick = async (evt: any) => {
         let newErrors = { ...errors };
-        if (!email) {
-            newErrors.email = 'Please type in your email';
+        if (!testEmail(email)) {
+            newErrors.email = 'This is not a valid email';
         }
-        if (!password) {
-            newErrors.password = 'Please type in your password';
+        if (!email) {
+            newErrors.email = 'Please type in an email';
+        }
+        if (!testPassword(password)) {
+            newErrors.password =
+                'Bad password format: minimum length 6 characters, must contain one capital letter and one lowercase letter';
+            return setErrors(newErrors);
+        }
+        if (!password || !confirmPassword) {
+            newErrors.password = 'Please type in a password';
+            return setErrors(newErrors);
+        }
+        if (password !== confirmPassword) {
+            newErrors.password = 'The passwords do not match!';
         }
         if (Object.keys(newErrors).length) return setErrors(newErrors);
+
         try {
-            await dispatch(logUserIn({ email, password }));
-            history.push('/dashboard');
+            setTimeout(() => history.push('/login'), 2000);
         } catch (e) {
             console.error(e);
         }
@@ -40,9 +53,13 @@ const Login = () => {
         });
     };
     return (
-        <LoginContainer>
-            <div className="login-box">
-                <p className="title">Be Generous</p>
+        <RegisterContainer>
+            <div className="register-box">
+                <div className="title">
+                    <p>Create your</p>
+                    <p className="title">Be Generous</p>
+                    <p>account</p>
+                </div>
                 <TextInput
                     type="text"
                     label="E-mail"
@@ -63,19 +80,28 @@ const Login = () => {
                     }}
                     error={errors.password}
                 />
+                <TextInput
+                    type="password"
+                    label="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        clearError('password');
+                        setConfirmPassword(e.target.value);
+                    }}
+                    error={errors.password}
+                />
                 {errMessage && <span className="login-error">{errMessage}</span>}
                 <div className="buttons">
-                    <ButtonDefault variant="outlined" onClick={() => history.push('/register')}>
-                        Register
+                    <ButtonDefault variant="outlined" onClick={() => history.push('/login')}>
+                        <ArrowBack /> &nbsp; Back to Login
                     </ButtonDefault>
-                    <ButtonPrimary variant="contained" onClick={handleLoginClick}>
-                        Login &nbsp;
-                        <ArrowForward />
+                    <ButtonPrimary variant="contained" onClick={handleRegisterClick}>
+                        Register
                     </ButtonPrimary>
                 </div>
             </div>
-        </LoginContainer>
+        </RegisterContainer>
     );
 };
 
-export default Login;
+export default Register;

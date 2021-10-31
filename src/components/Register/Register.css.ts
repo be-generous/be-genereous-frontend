@@ -2,13 +2,14 @@ import styled from 'styled-components';
 import { COLORS } from '../style/constants';
 import { loginBackground } from '../style/svg';
 
-export const LoginContainer = styled.div`
+export const RegisterContainer = styled.div`
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     overflow: hidden;
+
     &:before {
         content: '';
         background: url(${loginBackground}) 0 0 repeat;
@@ -21,16 +22,20 @@ export const LoginContainer = styled.div`
         animation: rotate 100s linear infinite;
     }
 
-    .login-box {
+    .register-box {
         background-color: ${COLORS.white};
-        .title {
+
+        p {
             font-size: 40px;
             font-weight: 700;
-            color: white;
-            text-shadow: 2px 2px 0 ${COLORS.primary.dark};
-            -webkit-text-stroke-width: 1px;
-            -webkit-text-stroke-color: ${COLORS.primary.dark};
+            &.title {
+                color: white;
+                text-shadow: 2px 2px 0 ${COLORS.primary.dark};
+                -webkit-text-stroke-width: 1px;
+                -webkit-text-stroke-color: ${COLORS.primary.dark};
+            }
         }
+
         display: flex;
         justify-content: center;
         align-items: center;
@@ -41,11 +46,14 @@ export const LoginContainer = styled.div`
         padding: 30px;
         box-shadow: 0 0 30px -10px #000;
         border-radius: 10px;
+
         .buttons {
             display: flex;
             gap: 20px;
         }
+
         .login-error {
+            max-width: 400px;
             color: ${COLORS.error.main};
             font-weight: bold;
             border: 1px solid ${COLORS.error.main};
@@ -53,6 +61,7 @@ export const LoginContainer = styled.div`
             border-radius: 5px;
         }
     }
+
     @keyframes rotate {
         from {
             transform: rotate(0deg);

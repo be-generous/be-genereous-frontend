@@ -26,7 +26,7 @@ const TextInputWrapper = styled.div`
 
     input[type='text'],
     input[type='password'] {
-        width: 300px;
+        width: 400px;
         height: 30px;
         padding: 6px;
         color: ${COLORS.grey.main};
