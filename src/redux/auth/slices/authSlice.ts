@@ -4,11 +4,12 @@ import { PERSIST } from 'redux-persist';
 
 export const logUserIn = createAsyncThunk('users/logUserIn', async (params: { email: string; password: string }, thunkAPI) => {
     const { email, password } = params;
-    const result = await BeGenerousAPI.login(email, password);
-    if (!result.success) {
-        return thunkAPI.rejectWithValue({ message: result.message });
+    try {
+        const result: any = await BeGenerousAPI.login(email, password);
+        return { token: result.access_token, message: result.message };
+    } catch (e: any) {
+        return thunkAPI.rejectWithValue({ message: e.error });
     }
-    return { token: result.token };
 });
 
 export const logUserOut = createAsyncThunk('users/logUserOut', async (_, thunkAPI) => {
