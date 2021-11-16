@@ -23,7 +23,18 @@ class BeGenerousAPI {
                     return resolve(result.data);
                 })
                 .catch((e) => {
-                    console.log(e);
+                    return reject(e.response.data);
+                });
+        });
+    }
+    public register(email: string, password: string, fullName: string, avatarURL: string = '') {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(`${this.baseURL}/api/user`, { email: email, password: password, fullName: fullName, avatarURL: avatarURL })
+                .then((result) => {
+                    return resolve(result.data);
+                })
+                .catch((e) => {
                     return reject(e.response.data);
                 });
         });
