@@ -71,7 +71,7 @@ class BeGenerousAPI {
         return new Promise((resolve, reject) => {
             axios
                 .post(
-                    `${this.baseURL}/api/user/`,
+                    `${this.baseURL}/api/user/update`,
                     { userId: userId, email: newEmail, password: newPassword, fullName: newFullName, avatarURL: newAvatarUrl },
                     {
                         headers: { Authorization: `Bearer ${token}` }
@@ -99,6 +99,33 @@ class BeGenerousAPI {
                         description: charity.description,
                         dateCreated: charity.dateCreated,
                         userId: charity.userId
+                    },
+                    {
+                        headers: { Authorization: `Bearer ${token}` }
+                    }
+                )
+                .then((result) => {
+                    return resolve(result.data);
+                })
+                .catch((e) => {
+                    return reject(e.response.data);
+                });
+        });
+    }
+    public updateCharity(token: string, newCharity: Charity) {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(
+                    `${this.baseURL}/api/charity/update`,
+                    {
+                        charityId: newCharity.charityId,
+                        goalAmount: newCharity.goalAmount,
+                        currentAmount: newCharity.currentAmount,
+                        coverImageURL: newCharity.coverImageURL,
+                        title: newCharity.title,
+                        description: newCharity.description,
+                        dateCreated: newCharity.dateCreated,
+                        userId: newCharity.userId
                     },
                     {
                         headers: { Authorization: `Bearer ${token}` }
