@@ -112,5 +112,21 @@ class BeGenerousAPI {
                 });
         });
     }
+    public getCharities(token: string) {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${this.baseURL}/api/charity/`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                .then((result) => {
+                    return resolve(result.data);
+                })
+                .catch((e) => {
+                    return reject(e.response.data);
+                });
+        });
+    }
 }
 export default BeGenerousAPI.getInstance;
