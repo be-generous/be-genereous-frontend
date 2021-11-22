@@ -55,5 +55,23 @@ class BeGenerousAPI {
                 });
         });
     }
+    public updateUser(token: string, userId: number, newEmail: string, newPassword: string, newFullName: string, newAvatarUrl: string) {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(
+                    `${this.baseURL}/api/user/${userId}`,
+                    { userId: userId, email: newEmail, password: newPassword, fullName: newFullName, avatarURL: newAvatarUrl },
+                    {
+                        headers: { Authorization: `Bearer ${token}` }
+                    }
+                )
+                .then((result) => {
+                    return resolve(result.data);
+                })
+                .catch((e) => {
+                    return reject(e.response.data);
+                });
+        });
+    }
 }
 export default BeGenerousAPI.getInstance;
