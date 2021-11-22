@@ -39,5 +39,21 @@ class BeGenerousAPI {
                 });
         });
     }
+    public getUser(token: string, userId: number) {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${this.baseURL}/api/user/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                .then((result) => {
+                    return resolve(result.data);
+                })
+                .catch((e) => {
+                    return reject(e.response.data);
+                });
+        });
+    }
 }
 export default BeGenerousAPI.getInstance;
