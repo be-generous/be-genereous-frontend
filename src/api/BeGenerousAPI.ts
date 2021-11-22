@@ -1,4 +1,16 @@
 import axios from 'axios';
+
+export type Charity = {
+    charityId: number;
+    goalAmount: number;
+    currentAmount: number;
+    coverImageURL: string;
+    title: string;
+    description: string;
+    dateCreated: string;
+    userId: number;
+};
+
 class BeGenerousAPI {
     private static __instance: BeGenerousAPI;
     private baseURL: string;
@@ -59,8 +71,35 @@ class BeGenerousAPI {
         return new Promise((resolve, reject) => {
             axios
                 .post(
-                    `${this.baseURL}/api/user/${userId}`,
+                    `${this.baseURL}/api/user/`,
                     { userId: userId, email: newEmail, password: newPassword, fullName: newFullName, avatarURL: newAvatarUrl },
+                    {
+                        headers: { Authorization: `Bearer ${token}` }
+                    }
+                )
+                .then((result) => {
+                    return resolve(result.data);
+                })
+                .catch((e) => {
+                    return reject(e.response.data);
+                });
+        });
+    }
+    public createCharity(token: string, charity: Charity) {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(
+                    `${this.baseURL}/api/charity/`,
+                    {
+                        charityId: charity.charityId,
+                        goalAmount: charity.goalAmount,
+                        currentAmount: charity.currentAmount,
+                        coverImageURL: charity.coverImageURL,
+                        title: charity.title,
+                        description: charity.description,
+                        dateCreated: charity.dateCreated,
+                        userId: charity.userId
+                    },
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }
