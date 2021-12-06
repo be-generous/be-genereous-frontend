@@ -5,5 +5,10 @@
   padding: 0;
 }
 html,body{
-
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #76d275;
+  }
 }
