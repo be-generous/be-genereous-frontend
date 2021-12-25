@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../Navbar/Navbar';
 import { CharitiesContainer } from './Charities.css';
-import BeGenerousAPI from '../../api/BeGenerousAPI';
+import BeGenerousAPI, { Charity } from '../../api/BeGenerousAPI';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { charitiesMock } from '../mocks/charitiesMock';
 import CharityCard from '../common/CharityCard';
 import { ButtonPrimary } from '../common/Buttons.css';
-import BgModal from '../common/BGModal';
+import AddCharityModal from './AddCharityModal';
 
 const Charities = () => {
     const own = window.location.pathname === '/my_charities';
-    const { token } = useSelector((state: RootState) => state.auth);
+    const { token, id } = useSelector((state: RootState) => state.auth);
     const [charities, setCharities] = useState<any>([]);
     const [openCreateModal, setOpenCreateModal] = useState(false);
 
@@ -21,8 +20,14 @@ const Charities = () => {
 
     const loadCharities = async () => {
         try {
-            const response = await BeGenerousAPI.getCharities(token);
-            setCharities(response);
+            const response: any = await BeGenerousAPI.getCharities(token);
+            let charities: Charity[] = [...response];
+            if (own) {
+                charities.filter((charitiy) => {
+                    return charitiy.userId === id;
+                });
+            }
+            setCharities(charities);
         } catch (e) {
             console.error(e);
         }
@@ -32,7 +37,7 @@ const Charities = () => {
         return charities.map((charity: any) => {
             return (
                 <CharityCard
-                    key={charity.id}
+                    key={charity.charityId}
                     goalAmount={charity.goalAmount}
                     currentAmount={charity.currentAmount}
                     coverImageURL={charity.coverImageURL}
@@ -54,6 +59,7 @@ const Charities = () => {
                 </div>
                 <div className="charities-container">{renderCharities()}</div>
             </div>
+            <AddCharityModal open={openCreateModal} onClose={() => setOpenCreateModal(false)} />
         </CharitiesContainer>
     );
 };

@@ -6,7 +6,7 @@ export const logUserIn = createAsyncThunk('users/logUserIn', async (params: { em
     const { email, password } = params;
     try {
         const result: any = await BeGenerousAPI.login(email, password);
-        return { token: result.access_token, message: result.message };
+        return { token: result.access_token, id: result.id, message: result.message };
     } catch (e: any) {
         return thunkAPI.rejectWithValue({ message: e.error });
     }
@@ -24,6 +24,7 @@ export const logUserOut = createAsyncThunk('users/logUserOut', async (_, thunkAP
 
 export interface AuthState {
     token: string;
+    id: string;
     loggedIn: boolean;
     isFetching: boolean;
     errMessage: string;
@@ -31,6 +32,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
     token: '',
+    id: '',
     loggedIn: false,
     isFetching: false,
     errMessage: ''
@@ -44,12 +46,14 @@ const slice = createSlice({
         builder
             .addCase(logUserIn.fulfilled, (state, action: any) => {
                 state.token = action.payload.token;
+                state.id = action.payload.id;
                 state.loggedIn = true;
                 state.isFetching = false;
                 state.errMessage = action.payload.message;
             })
             .addCase(logUserIn.rejected, (state, action: any) => {
                 state.token = '';
+                state.id = '';
                 state.loggedIn = false;
                 state.isFetching = false;
                 state.errMessage = action.payload.message;
@@ -59,6 +63,7 @@ const slice = createSlice({
             })
             .addCase(logUserOut.fulfilled, (state, action: any) => {
                 state.token = '';
+                state.id = '';
                 state.loggedIn = false;
                 state.isFetching = false;
                 state.errMessage = action.payload.message;
@@ -68,6 +73,7 @@ const slice = createSlice({
             })
             .addCase(logUserOut.rejected, (state, action: any) => {
                 state.token = '';
+                state.id = '';
                 state.loggedIn = false;
                 state.isFetching = false;
                 state.errMessage = action.payload.message;

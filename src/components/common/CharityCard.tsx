@@ -13,12 +13,13 @@ interface ICharityCard {
     description: string;
     dateCreated: number;
 }
+const placeholderImg = 'https://i.picsum.photos/id/885/500/200.jpg?hmac=m3p6BoT2MQmQqxEp7dBQku5oUw7y2RCiEOrA3LuKa3c';
 const CharityCard: FC<ICharityCard> = ({ goalAmount, currentAmount, coverImageURL, title, description, dateCreated }) => {
     const progressValue = Math.round((currentAmount / goalAmount) * 100);
     return (
         <CharityCardContainer>
             <div className="image-container">
-                <img src="https://i.picsum.photos/id/885/500/200.jpg?hmac=m3p6BoT2MQmQqxEp7dBQku5oUw7y2RCiEOrA3LuKa3c" />
+                <img src={coverImageURL || placeholderImg} />
             </div>
             <div className="title">{title}</div>
             <div className="description">

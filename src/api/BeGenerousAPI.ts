@@ -16,7 +16,8 @@ class BeGenerousAPI {
     private baseURL: string;
 
     constructor() {
-        this.baseURL = 'http://localhost:8080';
+        // this.baseURL = 'http://localhost:8080';
+        this.baseURL = 'https://be-generous.herokuapp.com';
     }
 
     public static get getInstance() {
