@@ -7,6 +7,8 @@ import Login from './Login/Login';
 import Dashboard from './Dashboard/Dashboard';
 import NotFound from './NotFound/NotFound';
 import Register from './Register/Register';
+import Charities from './Charities/Charities';
+import CharityDetail from './CharityDetail/CharityDetail';
 
 interface IPrivateRoute {
     component: any;
@@ -39,6 +41,9 @@ const Routes = () => {
                 {loggedIn || token ? <Redirect to="/" /> : <Register />}
             </Route>
             <PrivateRoute exact path="/dashboard" component={Dashboard} />
+            <PrivateRoute exact path="/charities" component={Charities} />
+            <PrivateRoute exact path="/charities/:id" component={CharityDetail} />
+            <PrivateRoute exact path="/my_charities" component={Charities} />
             <Route component={NotFound} />
         </Switch>
     );

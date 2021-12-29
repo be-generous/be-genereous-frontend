@@ -1,3 +1,5 @@
+@import "src/components/style/css/bgmodal";
+
 *{
   font-family: 'Roboto', serif ;
   font-size: 14px;
@@ -5,5 +7,10 @@
   padding: 0;
 }
 html,body{
-
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #76d275;
+  }
 }

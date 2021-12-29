@@ -23,9 +23,9 @@ const TextInputWrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 3px;
-
     input[type='text'],
-    input[type='password'] {
+    input[type='password'],
+    input[type='textarea'] {
         width: 400px;
         height: 30px;
         padding: 6px;
@@ -40,6 +40,9 @@ const TextInputWrapper = styled.div`
         &.error {
             border-color: ${COLORS.error.main};
         }
+    }
+    input[type='textarea'] {
+        height: 100px;
     }
 
     label {

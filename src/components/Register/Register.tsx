@@ -7,12 +7,14 @@ import { ArrowBack } from '@mui/icons-material';
 import { RootState } from '../../redux/store';
 import { useHistory } from 'react-router-dom';
 import { testEmail, testPassword } from '../../utils/utils';
+import BeGenerousAPI from '../../api/BeGenerousAPI';
 
 const Register = () => {
     const [email, setEmail] = useState('');
+    const [fullName, setFullName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+    const [errors, setErrors] = useState<{ email?: string; password?: string; fullName?: string }>({});
     const dispatch = useDispatch();
     const { errMessage } = useSelector((state: RootState) => state.auth);
     const history = useHistory();
@@ -24,6 +26,9 @@ const Register = () => {
         }
         if (!email) {
             newErrors.email = 'Please type in an email';
+        }
+        if (!fullName) {
+            newErrors.fullName = 'Please provide a full name longer than 3 characters';
         }
         if (!testPassword(password)) {
             newErrors.password =
@@ -40,7 +45,8 @@ const Register = () => {
         if (Object.keys(newErrors).length) return setErrors(newErrors);
 
         try {
-            setTimeout(() => history.push('/login'), 2000);
+            const response = await BeGenerousAPI.register(email, password, fullName);
+            history.push('/login');
         } catch (e) {
             console.error(e);
         }
@@ -69,6 +75,16 @@ const Register = () => {
                         setEmail(e.target.value);
                     }}
                     error={errors.email}
+                />
+                <TextInput
+                    type="text"
+                    label="Full name"
+                    value={fullName}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        clearError('fullName');
+                        setFullName(e.target.value);
+                    }}
+                    error={errors.fullName}
                 />
                 <TextInput
                     type="password"
