@@ -79,7 +79,6 @@ const DonateModal: FC<{ open: boolean; onClose: any; charityId: number }> = ({ o
                 creditCardId: creditCard,
                 charityId: charityId
             };
-            console.log(donation);
             const resp = await BeGenerousAPI.donate(token, donation);
             onClose();
         } catch (e) {

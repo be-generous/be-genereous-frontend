@@ -44,4 +44,9 @@
         font-weight: 700;
         color:#f44336;
     }
+
+    .dialog-confirm-actions{
+        display: flex;
+        justify-content: space-between;
+    }
 }

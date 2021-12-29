@@ -10,7 +10,7 @@ import { testEmail, testPassword } from '../../utils/utils';
 import CreditCard from '../common/CreditCard';
 import AddCreditCardModal from './AddCreditCardModal';
 
-const placeholderImage = 'https://i.picsum.photos/id/9/300/300.jpg?hmac=Zf_elnyFDTPzb9nUe7m1J5g080C689yQsh3U8_DhHWE';
+export const placeholderImage = 'https://i.picsum.photos/id/9/300/300.jpg?hmac=Zf_elnyFDTPzb9nUe7m1J5g080C689yQsh3U8_DhHWE';
 
 const Profile = () => {
     const { token, id } = useSelector((state: RootState) => state.auth);
@@ -171,7 +171,13 @@ const Profile = () => {
                 </ButtonPrimary>
                 {creditCards.length ? renderCreditCards() : 'No Credit Card Added'}
             </div>
-            <AddCreditCardModal open={openAddCreditCardModal} onClose={() => setOpenAddCreditCardModal(false)} />
+            <AddCreditCardModal
+                open={openAddCreditCardModal}
+                onClose={() => {
+                    loadUser();
+                    setOpenAddCreditCardModal(false);
+                }}
+            />
         </ProfileContainer>
     );
 };

@@ -11,6 +11,7 @@ import { Progress } from 'react-sweet-progress';
 import TextInput from '../common/TextInput';
 import DonationCard from '../common/DonationCard';
 import DonateModal from '../Charities/DonateModal';
+import DialogConfirm from '../common/DialogConfirm';
 
 const placeholderImg = 'https://i.picsum.photos/id/885/500/200.jpg?hmac=m3p6BoT2MQmQqxEp7dBQku5oUw7y2RCiEOrA3LuKa3c';
 const CharityDetail = (props: any) => {
@@ -20,6 +21,7 @@ const CharityDetail = (props: any) => {
     const [progressValue, setProgressValue] = useState<number>(0);
     const [donations, setDonations] = useState<any>([]);
     const [openDonateModal, setOpenDonateModal] = useState<boolean>(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
     const { token, id } = useSelector((state: RootState) => state.auth);
     const charityId: number = props.match.params.id;
 
@@ -57,7 +59,7 @@ const CharityDetail = (props: any) => {
                     message={donation.message}
                     date={donation.transactionDate}
                     amount={donation.amount}
-                    creditCardId={donation.creditCardId}
+                    userId={donation.userId}
                 />
             ));
     };
@@ -72,7 +74,7 @@ const CharityDetail = (props: any) => {
                     {own ? (
                         <>
                             <ButtonDefault variant="outlined">Edit</ButtonDefault>
-                            <ButtonPrimary variant="contained" className="button-delete">
+                            <ButtonPrimary variant="contained" className="button-delete" onClick={() => setOpenDeleteDialog(true)}>
                                 Delete
                             </ButtonPrimary>
                         </>
