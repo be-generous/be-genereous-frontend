@@ -11,6 +11,9 @@ export const CharitiesContainer = styled.div`
         gap: 20px;
         flex-wrap: wrap;
         justify-content: space-evenly;
+        a {
+            text-decoration: none;
+        }
     }
     .actions-container {
         display: flex;

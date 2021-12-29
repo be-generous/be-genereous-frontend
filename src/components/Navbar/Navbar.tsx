@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { Link } from 'react-router-dom';
 import { logUserOut } from '../../redux/auth/slices/authSlice';
-import { LinearProgress } from '@mui/material';
 
 const Navbar = () => {
     const { token } = useSelector((state: RootState) => state.auth);

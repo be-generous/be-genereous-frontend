@@ -7,6 +7,7 @@ import { RootState } from '../../redux/store';
 import CharityCard from '../common/CharityCard';
 import { ButtonPrimary } from '../common/Buttons.css';
 import AddCharityModal from './AddCharityModal';
+import { Link } from 'react-router-dom';
 
 const Charities = () => {
     const own = window.location.pathname === '/my_charities';
@@ -16,15 +17,15 @@ const Charities = () => {
 
     useEffect(() => {
         loadCharities();
-    }, []);
+    }, [own]);
 
     const loadCharities = async () => {
         try {
             const response: any = await BeGenerousAPI.getCharities(token);
             let charities: Charity[] = [...response];
             if (own) {
-                charities.filter((charitiy) => {
-                    return charitiy.userId === id;
+                charities = charities.filter((charity) => {
+                    return charity.userId == id;
                 });
             }
             setCharities(charities);
@@ -36,15 +37,17 @@ const Charities = () => {
     const renderCharities = () => {
         return charities.map((charity: any) => {
             return (
-                <CharityCard
-                    key={charity.charityId}
-                    goalAmount={charity.goalAmount}
-                    currentAmount={charity.currentAmount}
-                    coverImageURL={charity.coverImageURL}
-                    title={charity.title}
-                    description={charity.description}
-                    dateCreated={charity.dateCreated}
-                />
+                <Link key={charity.charityId} to={`/charities/${charity.charityId}`}>
+                    <CharityCard
+                        key={charity.charityId}
+                        goalAmount={charity.goalAmount}
+                        currentAmount={charity.currentAmount}
+                        coverImageURL={charity.coverImageURL}
+                        title={charity.title}
+                        description={charity.description}
+                        dateCreated={charity.dateCreated}
+                    />
+                </Link>
             );
         });
     };
@@ -57,7 +60,11 @@ const Charities = () => {
                         Set up a new charity
                     </ButtonPrimary>
                 </div>
-                <div className="charities-container">{renderCharities()}</div>
+                {charities.length ? (
+                    <div className="charities-container">{renderCharities()}</div>
+                ) : (
+                    <div className="charities-container">There are no charities, go ahead and set up a new one</div>
+                )}
             </div>
             <AddCharityModal open={openCreateModal} onClose={() => setOpenCreateModal(false)} />
         </CharitiesContainer>

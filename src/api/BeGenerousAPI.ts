@@ -156,5 +156,22 @@ class BeGenerousAPI {
                 });
         });
     }
+
+    public getDonationsByCharity(token: string, charityId: number) {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${this.baseURL}/api/donation/charity/${charityId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                .then((result) => {
+                    return resolve(result.data);
+                })
+                .catch((e) => {
+                    return reject(e.response.data);
+                });
+        });
+    }
 }
 export default BeGenerousAPI.getInstance;
