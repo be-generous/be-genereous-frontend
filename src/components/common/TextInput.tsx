@@ -25,7 +25,8 @@ const TextInputWrapper = styled.div`
     gap: 3px;
     input[type='text'],
     input[type='password'],
-    input[type='textarea'] {
+    input[type='textarea'],
+    input[type='date'] {
         width: 400px;
         height: 30px;
         padding: 6px;

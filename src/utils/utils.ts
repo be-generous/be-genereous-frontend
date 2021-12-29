@@ -8,3 +8,10 @@ export const testPassword = (password: string) => {
     const regEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/gm;
     return regEx.test(password);
 };
+
+export const formatCardNumber = (value: string) => {
+    const regex = /^(\d{0,4})(\d{0,4})(\d{0,4})(\d{0,4})$/g;
+    const onlyNumbers = value.replace(/[^\d]/g, '');
+
+    return onlyNumbers.replace(regex, (regex, $1, $2, $3, $4) => [$1, $2, $3, $4].filter((group) => !!group).join(' '));
+};

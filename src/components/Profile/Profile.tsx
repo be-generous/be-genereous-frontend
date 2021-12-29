@@ -7,6 +7,8 @@ import BeGenerousAPI from '../../api/BeGenerousAPI';
 import TextInput from '../common/TextInput';
 import { ButtonDefault, ButtonPrimary } from '../common/Buttons.css';
 import { testEmail, testPassword } from '../../utils/utils';
+import CreditCard from '../common/CreditCard';
+import AddCreditCardModal from './AddCreditCardModal';
 
 const placeholderImage = 'https://i.picsum.photos/id/9/300/300.jpg?hmac=Zf_elnyFDTPzb9nUe7m1J5g080C689yQsh3U8_DhHWE';
 
@@ -20,6 +22,8 @@ const Profile = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [fetching, setFetching] = useState<boolean>(false);
     const [newProfileURL, setNewProfileURL] = useState<string>('');
+    const [creditCards, setCreditCards] = useState<any>([]);
+    const [openAddCreditCardModal, setOpenAddCreditCardModal] = useState<boolean>(false);
 
     useEffect(() => {
         loadUser();
@@ -31,6 +35,8 @@ const Profile = () => {
             setProfileURL(userResponse.avatarURL);
             setFullName(userResponse.fullName);
             setEmail(userResponse.email);
+            const cardsResponse: any = await BeGenerousAPI.getCreditCards(token, id);
+            setCreditCards(cardsResponse);
         } catch (ex) {
             console.error(ex);
         }
@@ -85,6 +91,13 @@ const Profile = () => {
             console.error(ex);
         }
     };
+
+    const renderCreditCards = () => {
+        return creditCards.map((creditCard: any, index: number) => (
+            <CreditCard key={index} cardHolder={creditCard.name} cardNumber={creditCard.cardNumber} balance={creditCard.balance} />
+        ));
+    };
+
     const clearError = (field: string) => {
         setErrors((errors: any) => {
             let newErrors = { ...errors };
@@ -152,7 +165,13 @@ const Profile = () => {
                 <ButtonPrimary variant="contained" disabled={fetching} onClick={() => onSaveChanges()}>
                     Save Changes
                 </ButtonPrimary>
+                <h1>Credit cards</h1>
+                <ButtonPrimary variant="contained" onClick={() => setOpenAddCreditCardModal(true)}>
+                    Add Credit Card
+                </ButtonPrimary>
+                {creditCards.length ? renderCreditCards() : 'No Credit Card Added'}
             </div>
+            <AddCreditCardModal open={openAddCreditCardModal} onClose={() => setOpenAddCreditCardModal(false)} />
         </ProfileContainer>
     );
 };
