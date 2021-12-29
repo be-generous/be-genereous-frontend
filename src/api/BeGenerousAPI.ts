@@ -205,5 +205,20 @@ class BeGenerousAPI {
                 });
         });
     }
+
+    public donate(token: string, donation: any) {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(`${this.baseURL}/api/donation`, donation, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                .then((result) => {
+                    return resolve(result.data);
+                })
+                .catch((e) => {
+                    return reject(e.response.data);
+                });
+        });
+    }
 }
 export default BeGenerousAPI.getInstance;
