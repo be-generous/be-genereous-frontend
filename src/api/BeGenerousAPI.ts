@@ -68,12 +68,12 @@ class BeGenerousAPI {
                 });
         });
     }
-    public updateUser(token: string, userId: number, newEmail: string, newPassword: string, newFullName: string, newAvatarUrl: string) {
+    public updateUser(token: string, userId: number, newData: object) {
         return new Promise((resolve, reject) => {
             axios
                 .post(
                     `${this.baseURL}/api/user/update`,
-                    { userId: userId, email: newEmail, password: newPassword, fullName: newFullName, avatarURL: newAvatarUrl },
+                    { userId: userId, ...newData },
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }

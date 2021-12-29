@@ -4,6 +4,7 @@ import { COLORS } from '../style/constants';
 export const ButtonPrimary = styled(Button)`
     width: 120px;
     height: 40px;
+    min-width: fit-content;
     background-color: ${COLORS.primary.light};
     &:hover {
         background-color: ${COLORS.primary.dark};
