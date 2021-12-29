@@ -5,12 +5,14 @@ import { COLORS } from '../style/constants';
 interface ICreditCard {
     cardHolder: string;
     cardNumber: string;
+    balance: number;
 }
-const CreditCard: FC<ICreditCard> = ({ cardHolder, cardNumber }) => {
+const CreditCard: FC<ICreditCard> = ({ cardHolder, cardNumber, balance }) => {
     return (
         <CreditCardContainer>
             <div className="card-holder">{cardHolder}</div>
             <div className="card-number">{cardNumber}</div>
+            <div className="card-balance">Available balance: {balance} BGC</div>
         </CreditCardContainer>
     );
 };
@@ -19,7 +21,7 @@ export default CreditCard;
 
 const CreditCardContainer = styled.div`
     width: 324px;
-    height: 225px;
+    height: 190px;
     border-radius: 9px;
     background-color: ${COLORS.primary.dark};
     position: relative;
@@ -35,6 +37,12 @@ const CreditCardContainer = styled.div`
         position: absolute;
         letter-spacing: 5px;
         right: 20px;
-        bottom: 60px;
+        bottom: 70px;
+    }
+    .card-balance {
+        position: absolute;
+        top: 30px;
+        left: 20px;
+        letter-spacing: 4px;
     }
 `;

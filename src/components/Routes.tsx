@@ -9,6 +9,7 @@ import NotFound from './NotFound/NotFound';
 import Register from './Register/Register';
 import Charities from './Charities/Charities';
 import CharityDetail from './CharityDetail/CharityDetail';
+import Profile from './Profile/Profile';
 
 interface IPrivateRoute {
     component: any;
@@ -44,6 +45,7 @@ const Routes = () => {
             <PrivateRoute exact path="/charities" component={Charities} />
             <PrivateRoute exact path="/charities/:id" component={CharityDetail} />
             <PrivateRoute exact path="/my_charities" component={Charities} />
+            <PrivateRoute exact path="/profile" component={Profile} />
             <Route component={NotFound} />
         </Switch>
     );

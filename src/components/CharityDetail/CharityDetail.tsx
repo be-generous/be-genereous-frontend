@@ -10,6 +10,8 @@ import { COLORS } from '../style/constants';
 import { Progress } from 'react-sweet-progress';
 import TextInput from '../common/TextInput';
 import DonationCard from '../common/DonationCard';
+import DonateModal from '../Charities/DonateModal';
+import DialogConfirm from '../common/DialogConfirm';
 
 const placeholderImg = 'https://i.picsum.photos/id/885/500/200.jpg?hmac=m3p6BoT2MQmQqxEp7dBQku5oUw7y2RCiEOrA3LuKa3c';
 const CharityDetail = (props: any) => {
@@ -18,6 +20,8 @@ const CharityDetail = (props: any) => {
     const [fullName, setFullName] = useState<string>('');
     const [progressValue, setProgressValue] = useState<number>(0);
     const [donations, setDonations] = useState<any>([]);
+    const [openDonateModal, setOpenDonateModal] = useState<boolean>(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
     const { token, id } = useSelector((state: RootState) => state.auth);
     const charityId: number = props.match.params.id;
 
@@ -55,7 +59,7 @@ const CharityDetail = (props: any) => {
                     message={donation.message}
                     date={donation.transactionDate}
                     amount={donation.amount}
-                    creditCardId={donation.creditCardId}
+                    userId={donation.userId}
                 />
             ));
     };
@@ -64,13 +68,15 @@ const CharityDetail = (props: any) => {
             <Navbar />
             <div className="detail-content">
                 <div className="action-buttons">
-                    <ButtonPrimary variant="contained">Donate</ButtonPrimary>
+                    <ButtonPrimary variant="contained" onClick={() => setOpenDonateModal(true)}>
+                        Donate
+                    </ButtonPrimary>
                     {own ? (
                         <>
-                            <ButtonPrimary variant="contained" className="button-delete">
+                            <ButtonDefault variant="outlined">Edit</ButtonDefault>
+                            <ButtonPrimary variant="contained" className="button-delete" onClick={() => setOpenDeleteDialog(true)}>
                                 Delete
                             </ButtonPrimary>
-                            <ButtonDefault variant="outlined">Edit</ButtonDefault>
                         </>
                     ) : (
                         ''
@@ -101,6 +107,14 @@ const CharityDetail = (props: any) => {
                 <h1>Donations</h1>
                 {donations.length ? renderDonations() : <div className="no-message">No donations so far!</div>}
             </div>
+            <DonateModal
+                open={openDonateModal}
+                onClose={() => {
+                    loadCharity();
+                    setOpenDonateModal(false);
+                }}
+                charityId={charityId}
+            />
         </CharityDetailContainer>
     );
 };

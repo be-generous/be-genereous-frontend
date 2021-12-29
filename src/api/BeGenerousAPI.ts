@@ -68,12 +68,12 @@ class BeGenerousAPI {
                 });
         });
     }
-    public updateUser(token: string, userId: number, newEmail: string, newPassword: string, newFullName: string, newAvatarUrl: string) {
+    public updateUser(token: string, userId: number, newData: object) {
         return new Promise((resolve, reject) => {
             axios
                 .post(
                     `${this.baseURL}/api/user/update`,
-                    { userId: userId, email: newEmail, password: newPassword, fullName: newFullName, avatarURL: newAvatarUrl },
+                    { userId: userId, ...newData },
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }
@@ -157,6 +157,38 @@ class BeGenerousAPI {
         });
     }
 
+    public addCreditCard(token: string, creditCardData: any) {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(`${this.baseURL}/api/creditcard`, creditCardData, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                .then((result) => {
+                    return resolve(result.data);
+                })
+                .catch((e) => {
+                    return reject(e.response.data);
+                });
+        });
+    }
+
+    public getCreditCards(token: string, userId: number) {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${this.baseURL}/api/creditcard/?id=${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                .then((result) => {
+                    return resolve(result.data);
+                })
+                .catch((e) => {
+                    return reject(e.response.data);
+                });
+        });
+    }
+
     public getDonationsByCharity(token: string, charityId: number) {
         return new Promise((resolve, reject) => {
             axios
@@ -164,6 +196,21 @@ class BeGenerousAPI {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
+                })
+                .then((result) => {
+                    return resolve(result.data);
+                })
+                .catch((e) => {
+                    return reject(e.response.data);
+                });
+        });
+    }
+
+    public donate(token: string, donation: any) {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(`${this.baseURL}/api/donation`, donation, {
+                    headers: { Authorization: `Bearer ${token}` }
                 })
                 .then((result) => {
                     return resolve(result.data);

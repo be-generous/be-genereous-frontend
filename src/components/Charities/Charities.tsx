@@ -66,7 +66,13 @@ const Charities = () => {
                     <div className="charities-container">There are no charities, go ahead and set up a new one</div>
                 )}
             </div>
-            <AddCharityModal open={openCreateModal} onClose={() => setOpenCreateModal(false)} />
+            <AddCharityModal
+                open={openCreateModal}
+                onClose={() => {
+                    loadCharities();
+                    setOpenCreateModal(false);
+                }}
+            />
         </CharitiesContainer>
     );
 };

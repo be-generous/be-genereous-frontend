@@ -34,4 +34,19 @@
         justify-content: center;
         gap: 20px;
     }
+    .credit-card-option{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap:30px
+    }
+    .credit-card-error{
+        font-weight: 700;
+        color:#f44336;
+    }
+
+    .dialog-confirm-actions{
+        display: flex;
+        justify-content: space-between;
+    }
 }
