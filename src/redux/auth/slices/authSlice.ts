@@ -6,7 +6,9 @@ export const logUserIn = createAsyncThunk('users/logUserIn', async (params: { em
     const { email, password } = params;
     try {
         const result: any = await BeGenerousAPI.login(email, password);
-        return { token: result.access_token, id: result.id, message: result.message };
+        let isAdmin = false;
+        if (email === 'admin@admin.com') isAdmin = true;
+        return { token: result.access_token, id: result.id, message: result.message, isAdmin: isAdmin };
     } catch (e: any) {
         return thunkAPI.rejectWithValue({ message: e.error });
     }
@@ -28,6 +30,7 @@ export interface AuthState {
     loggedIn: boolean;
     isFetching: boolean;
     errMessage: string;
+    isAdmin: boolean;
 }
 
 const initialState: AuthState = {
@@ -35,7 +38,8 @@ const initialState: AuthState = {
     id: '',
     loggedIn: false,
     isFetching: false,
-    errMessage: ''
+    errMessage: '',
+    isAdmin: false
 };
 
 const slice = createSlice({
@@ -50,6 +54,7 @@ const slice = createSlice({
                 state.loggedIn = true;
                 state.isFetching = false;
                 state.errMessage = action.payload.message;
+                state.isAdmin = action.payload.isAdmin;
             })
             .addCase(logUserIn.rejected, (state, action: any) => {
                 state.token = '';
@@ -57,6 +62,7 @@ const slice = createSlice({
                 state.loggedIn = false;
                 state.isFetching = false;
                 state.errMessage = action.payload.message;
+                state.isAdmin = false;
             })
             .addCase(logUserIn.pending, (state) => {
                 state.isFetching = true;
@@ -67,6 +73,7 @@ const slice = createSlice({
                 state.loggedIn = false;
                 state.isFetching = false;
                 state.errMessage = action.payload.message;
+                state.isAdmin = false;
             })
             .addCase(logUserOut.pending, (state) => {
                 state.isFetching = true;
@@ -77,6 +84,7 @@ const slice = createSlice({
                 state.loggedIn = false;
                 state.isFetching = false;
                 state.errMessage = action.payload.message;
+                state.isAdmin = false;
             })
             .addCase(PERSIST, (state) => {
                 state.errMessage = '';

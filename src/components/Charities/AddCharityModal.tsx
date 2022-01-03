@@ -67,6 +67,7 @@ const AddCharityModal: FC<{ open: boolean; onClose: any; charityEdit?: any }> = 
             if (charityEdit) {
                 console.log('here, Edit');
                 charity.charityId = charityEdit.charityId;
+                charity.userId = charityEdit.userId;
                 const resp = await BeGenerousAPI.updateCharity(token, charity);
             } else {
                 console.log('here, create');

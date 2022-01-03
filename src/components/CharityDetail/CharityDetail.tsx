@@ -26,7 +26,7 @@ const CharityDetail = (props: any) => {
     const [openDonateModal, setOpenDonateModal] = useState<boolean>(false);
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
     const [openEditModal, setOpenEditModal] = useState<boolean>(false);
-    const { token, id } = useSelector((state: RootState) => state.auth);
+    const { token, id, isAdmin } = useSelector((state: RootState) => state.auth);
     const charityId: number = props.match.params.id;
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const CharityDetail = (props: any) => {
         try {
             const response: any = await BeGenerousAPI.getCharities(token);
             let fetchedCharity: Charity = response.filter((charity: Charity) => charity.charityId == charityId)[0];
-            if (fetchedCharity.userId == id) {
+            if (fetchedCharity.userId == id || isAdmin) {
                 setOwn(true);
             }
             setProgressValue(Math.round((fetchedCharity.currentAmount / fetchedCharity.goalAmount) * 100));
@@ -63,7 +63,6 @@ const CharityDetail = (props: any) => {
                 />
             ));
     };
-    console.log(charity);
     return (
         <CharityDetailContainer>
             <Navbar />

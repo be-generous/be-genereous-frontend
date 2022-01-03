@@ -21,7 +21,7 @@ const DonationCard: FC<IDonationCard> = ({ message, date, amount, userId }) => {
     });
     const loadUser = async () => {
         try {
-            const userResponse: any = await BeGenerousAPI.getUser(token, id);
+            const userResponse: any = await BeGenerousAPI.getUser(token, userId);
             setProfileURL(userResponse.avatarURL);
             setFullName(userResponse.fullName);
         } catch (ex) {
