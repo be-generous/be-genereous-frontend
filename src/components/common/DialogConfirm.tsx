@@ -17,7 +17,7 @@ const DialogConfirm: FC<{ open: boolean; onNegative: any; onPositive: any; title
                 <ButtonDefault variant="outlined" onClick={() => onNegative()}>
                     NO
                 </ButtonDefault>
-                <ButtonPrimary variant="contained" onClick={() => onPositive}>
+                <ButtonPrimary variant="contained" onClick={() => onPositive()}>
                     YES
                 </ButtonPrimary>
             </div>

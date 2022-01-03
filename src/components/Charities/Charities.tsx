@@ -35,9 +35,9 @@ const Charities = () => {
     };
 
     const renderCharities = () => {
-        return charities.map((charity: any) => {
+        return charities.map((charity: any, index: number) => {
             return (
-                <Link key={charity.charityId} to={`/charities/${charity.charityId}`}>
+                <Link key={charity.index} to={`/charities/${charity.charityId}`}>
                     <CharityCard
                         key={charity.charityId}
                         goalAmount={charity.goalAmount}

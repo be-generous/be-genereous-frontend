@@ -18,7 +18,7 @@ const DonateModal: FC<{ open: boolean; onClose: any; charityId: number }> = ({ o
 
     useEffect(() => {
         loadCards();
-    });
+    }, []);
     const loadCards = async () => {
         try {
             const cardsResponse: any = await BeGenerousAPI.getCreditCards(token, id);

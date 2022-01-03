@@ -12,9 +12,12 @@ import TextInput from '../common/TextInput';
 import DonationCard from '../common/DonationCard';
 import DonateModal from '../Charities/DonateModal';
 import DialogConfirm from '../common/DialogConfirm';
+import AddCharityModal from '../Charities/AddCharityModal';
+import { useHistory } from 'react-router-dom';
 
 const placeholderImg = 'https://i.picsum.photos/id/885/500/200.jpg?hmac=m3p6BoT2MQmQqxEp7dBQku5oUw7y2RCiEOrA3LuKa3c';
 const CharityDetail = (props: any) => {
+    const history = useHistory();
     const [charity, setCharity] = useState<any>({});
     const [own, setOwn] = useState<boolean>(false);
     const [fullName, setFullName] = useState<string>('');
@@ -22,6 +25,7 @@ const CharityDetail = (props: any) => {
     const [donations, setDonations] = useState<any>([]);
     const [openDonateModal, setOpenDonateModal] = useState<boolean>(false);
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
+    const [openEditModal, setOpenEditModal] = useState<boolean>(false);
     const { token, id } = useSelector((state: RootState) => state.auth);
     const charityId: number = props.match.params.id;
 
@@ -37,20 +41,16 @@ const CharityDetail = (props: any) => {
             }
             setProgressValue(Math.round((fetchedCharity.currentAmount / fetchedCharity.goalAmount) * 100));
             setCharity(fetchedCharity);
-
-            const donationResponse = await BeGenerousAPI.getDonationsByCharity(token, fetchedCharity.charityId);
-            setDonations(donationResponse);
             const userResponse: any = await BeGenerousAPI.getUser(token, fetchedCharity.userId);
             setFullName(userResponse.fullName);
+            const donationResponse = await BeGenerousAPI.getDonationsByCharity(token, fetchedCharity.charityId);
+            setDonations(donationResponse);
         } catch (e) {
             console.error(e);
         }
     };
 
     const renderDonations = () => {
-        const sorted = donations.sort((a: any, b: any) => {
-            return a.donationId - b.donationId;
-        });
         return donations
             .sort((a: any, b: any) => (a.transactionDate < b.transactionDate ? 1 : -1))
             .map((donation: any, index: number) => (
@@ -63,6 +63,7 @@ const CharityDetail = (props: any) => {
                 />
             ));
     };
+    console.log(charity);
     return (
         <CharityDetailContainer>
             <Navbar />
@@ -73,7 +74,9 @@ const CharityDetail = (props: any) => {
                     </ButtonPrimary>
                     {own ? (
                         <>
-                            <ButtonDefault variant="outlined">Edit</ButtonDefault>
+                            <ButtonDefault variant="outlined" onClick={() => setOpenEditModal(true)}>
+                                Edit
+                            </ButtonDefault>
                             <ButtonPrimary variant="contained" className="button-delete" onClick={() => setOpenDeleteDialog(true)}>
                                 Delete
                             </ButtonPrimary>
@@ -114,6 +117,24 @@ const CharityDetail = (props: any) => {
                     setOpenDonateModal(false);
                 }}
                 charityId={charityId}
+            />
+            <DialogConfirm
+                open={openDeleteDialog}
+                onNegative={() => setOpenDeleteDialog(false)}
+                onPositive={async () => {
+                    await BeGenerousAPI.deleteCharity(token, charityId);
+                    history.push('/charities');
+                }}
+                title={'DELETE CHARITY'}
+                message={'Are you sure you want to delete this charity?'}
+            />
+            <AddCharityModal
+                open={openEditModal}
+                onClose={() => {
+                    loadCharity();
+                    setOpenEditModal(false);
+                }}
+                charityEdit={charity}
             />
         </CharityDetailContainer>
     );

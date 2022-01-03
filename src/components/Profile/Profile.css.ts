@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const ProfileContainer = styled.div`
     .profile-content {
+        padding: 20px;
         display: flex;
         flex-direction: column;
         justify-content: center;
