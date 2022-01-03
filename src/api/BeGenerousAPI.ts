@@ -121,11 +121,9 @@ class BeGenerousAPI {
                     {
                         charityId: newCharity.charityId,
                         goalAmount: newCharity.goalAmount,
-                        currentAmount: newCharity.currentAmount,
                         coverImageURL: newCharity.coverImageURL,
                         title: newCharity.title,
                         description: newCharity.description,
-                        dateCreated: newCharity.dateCreated,
                         userId: newCharity.userId
                     },
                     {
@@ -140,6 +138,22 @@ class BeGenerousAPI {
                 });
         });
     }
+
+    public deleteCharity(token: string, id: number) {
+        return new Promise((resolve, reject) => {
+            axios
+                .post(`${this.baseURL}/api/charity/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                .then((result) => {
+                    return resolve(result);
+                })
+                .catch((e) => {
+                    return reject(e);
+                });
+        });
+    }
+
     public getCharities(token: string) {
         return new Promise((resolve, reject) => {
             axios
