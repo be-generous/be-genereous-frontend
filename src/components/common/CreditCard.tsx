@@ -23,7 +23,8 @@ const CreditCardContainer = styled.div`
     width: 324px;
     height: 190px;
     border-radius: 9px;
-    background-color: ${COLORS.primary.dark};
+    background: ${COLORS.primary.light};
+    background: linear-gradient(0deg, ${COLORS.primary.light} 0%, ${COLORS.primary.dark} 100%);
     position: relative;
     color: ${COLORS.white};
     font-weight: bold;
